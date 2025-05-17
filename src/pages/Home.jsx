@@ -1,22 +1,28 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+// Axios is used here to make HTTP requests to the backend 
 import axios from 'axios';
 
 const Home = () => {
   const navigate = useNavigate();
   const [user, setUser] = useState(null);
 
+  // runs its function once when the component is first rendered
   useEffect(() => {
     const fetchUser = async () => {
+        // This defines an asynchronous function fetchUser that will fetch the logged-in user's data from the backend
       const token = localStorage.getItem('token');
 
+      // If no token is found, redirect to login page
       if (!token) {
         navigate('/login');
         return;
       }
 
       try {
-        const res = await axios.get('http://localhost:5000/api/auth/user', {
+        // This sends a GET request to your backend user endpoint with the token in the Authorization header
+        // The backend should verify the token and return the user data if valid
+        const res = await axios.get('http://localhost:5050/api/auth/me', {
           headers: {
             Authorization: `Bearer ${token}`,
           },

@@ -15,11 +15,12 @@ const Signup = () => {
     e.preventDefault();
 
     try {
-      const res = await axios.post('http://localhost:5000/api/auth/signup', {
+      const res = await axios.post('/api/auth/signup', {
         name,
         email,
-        password,
-      });
+        password,} , 
+        { withCredentials: true }
+    );
 
       // Save token to localStorage
       localStorage.setItem('token', res.data.token);
@@ -27,7 +28,17 @@ const Signup = () => {
       // Navigate to home page
       navigate('/');
     } catch (err) {
-      alert(err.response?.data?.message || 'Signup failed');
+        console.error('Signup Error:', err);
+        if (err.response) {
+          console.error('Backend responded with:', err.response.data);
+          alert(err.response.data.message || 'Signup failed');
+        } else if (err.request) {
+          console.error('Request was made but no response:', err.request);
+          alert('No response from backend. Check if server is running and CORS is set up.');
+        } else {
+          console.error('Error setting up request:', err.message);
+          alert('Signup failed. Unknown error.');
+        }
     }
   };
 

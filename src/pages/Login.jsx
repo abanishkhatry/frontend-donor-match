@@ -1,6 +1,7 @@
 // importing necessary libraries and components
 import React, { useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate} from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import axios from 'axios';
 
 
@@ -26,12 +27,21 @@ const Login = () => {
       });
 
       // Save token to localStorage
-      localStorage.setItem('token', res.data.token);
+      localStorage.setItem('test-token', res.data.token);
+
 
       // Navigate to home page
       navigate('/');
+
     } catch (err) {
-      alert(err.response?.data?.message || 'Login failed');
+      console.error('Login error:', err);
+      if (err.response) {
+        console.error('Backend says:', err.response.data);
+        alert(err.response.data.message || 'Login failed');
+      } else {
+        alert('Login failed. No response from backend.');
+      }
+
     }
   };
 
